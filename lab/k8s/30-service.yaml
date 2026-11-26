@@ -1,0 +1,13 @@
+# A Service gives the pods ONE stable address and load-balances across them.
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo
+  namespace: demo
+spec:
+  type: NodePort
+  selector: { app: demo }          # send traffic to any READY pod with label app=demo
+  ports:
+    - port: 80                     # in-cluster:  http://demo.demo.svc.cluster.local
+      targetPort: 3000             # the container port
+      nodePort: 30080              # outside:     http://localhost:8080 (via kind port mapping)

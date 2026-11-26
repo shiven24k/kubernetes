@@ -1,0 +1,14 @@
+# A local Kubernetes cluster made of Docker containers:
+# 1 control-plane "machine" + 2 worker "machines".
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: learn
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      # Your laptop's localhost:8080 -> NodePort 30080 inside the cluster.
+      - containerPort: 30080
+        hostPort: 8080
+        protocol: TCP
+  - role: worker
+  - role: worker

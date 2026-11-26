@@ -1,0 +1,47 @@
+# A Deployment says: "keep N identical copies (pods) of this container running".
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo
+  namespace: demo
+  labels: { app: demo }
+spec:
+  replicas: 3                       # desired number of pods
+  revisionHistoryLimit: 5           # how many old versions to keep for rollback
+  selector:
+    matchLabels: { app: demo }      # "the pods I own are the ones labelled app=demo"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1                   # at most 1 extra pod during an update
+      maxUnavailable: 0             # never drop below the desired count
+  template:                         # the blueprint for every pod
+    metadata:
+      labels: { app: demo }
+    spec:
+      terminationGracePeriodSeconds: 15
+      containers:
+        - name: app
+          image: demo-app:1.0
+          imagePullPolicy: IfNotPresent   # image is loaded into kind, not pulled from a registry
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef: { name: demo-config }
+          env:
+            # Downward API: let the app know its own pod and node name.
+            - name: POD_NAME
+              valueFrom: { fieldRef: { fieldPath: metadata.name } }
+            - name: NODE_NAME
+              valueFrom: { fieldRef: { fieldPath: spec.nodeName } }
+          resources:
+            requests: { cpu: 100m, memory: 64Mi }   # what the scheduler reserves
+            limits:   { cpu: 500m, memory: 128Mi }  # hard ceiling
+          readinessProbe:                # "send me traffic?" fail => removed from Service
+            httpGet: { path: /readyz, port: 3000 }
+            periodSeconds: 2
+            failureThreshold: 1
+          livenessProbe:                 # "am I alive?" fail => container restarted
+            httpGet: { path: /healthz, port: 3000 }
+            initialDelaySeconds: 5
+            periodSeconds: 5

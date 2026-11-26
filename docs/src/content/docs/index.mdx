@@ -1,0 +1,31 @@
+---
+title: Learn Kubernetes by Watching It Work
+description: From Docker basics to autoscaling a real app on a local cluster.
+template: splash
+hero:
+  tagline: Read a short page, then run it on your own laptop and watch the result in a live visualizer. Covers the prerequisites, the core ideas, and how scaling actually happens.
+  actions:
+    - text: Start with the roadmap
+      link: /00-start/roadmap/
+      icon: right-arrow
+    - text: Jump to the hands-on lab
+      link: /04-lab/00-setup/
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid>
+  <Card title="1. Prerequisites" icon="open-book">
+    Linux shell, networking, containers and Docker, YAML. Covers just enough of each to follow the rest.
+  </Card>
+  <Card title="2. Kubernetes core" icon="puzzle">
+    Pods, Deployments, Services, config, health checks, storage, Ingress, namespaces.
+  </Card>
+  <Card title="3. Scaling" icon="rocket">
+    How one Docker image becomes 10 servers: replicas, autoscalers, nodes, zero-downtime updates.
+  </Card>
+  <Card title="4. Hands-on lab" icon="laptop">
+    A 3-node cluster on your machine, a live visualizer, chaos buttons, and live code reloading with Tilt.
+  </Card>
+</CardGrid>

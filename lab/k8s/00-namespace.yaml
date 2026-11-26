@@ -1,0 +1,5 @@
+# A namespace is a folder for resources. Everything for this lab lives in "demo".
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo

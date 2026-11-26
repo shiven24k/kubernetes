@@ -1,0 +1,28 @@
+# A throwaway pod that hammers the Service with CPU-heavy requests.
+# Apply it to trigger autoscaling, delete it to let things calm down.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: load-generator
+  namespace: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: load-generator }
+  template:
+    metadata:
+      labels: { app: load-generator }
+    spec:
+      containers:
+        - name: load
+          image: busybox:1.36
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "hammering http://demo/api/burn ..."
+              for i in 1 2 3 4; do
+                (while true; do wget -q -O /dev/null "http://demo/api/burn?ms=200"; done) &
+              done
+              wait
+          resources:
+            requests: { cpu: 50m, memory: 16Mi }

@@ -1,0 +1,9 @@
+# Non-secret configuration, injected into the pods as environment variables.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: demo-config
+  namespace: demo
+data:
+  APP_MESSAGE: "Hello from Kubernetes! Edit k8s/10-configmap.yaml to change me."
+  APP_COLOR: "#4f8cff"

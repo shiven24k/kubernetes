@@ -1,0 +1,24 @@
+# Horizontal Pod Autoscaler: add/remove pods based on CPU usage.
+# Requires metrics-server (installed by `make metrics`).
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: demo
+  namespace: demo
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: demo
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50     # % of the pod's CPU *request* (100m)
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 30  # default is 300s; shortened so you can see it in the lab
