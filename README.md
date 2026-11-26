@@ -83,8 +83,8 @@ No prior Kubernetes knowledge is needed. Basic terminal comfort helps, and the p
 
 ```bash
 # 1. Get the code
-git clone https://github.com/<your-username>/learn-kubernetes.git
-cd learn-kubernetes
+git clone https://github.com/shiven24k/kubernetes.git
+cd kubernetes
 
 # 2. Start the docs → http://localhost:4321
 cd docs
